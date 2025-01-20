@@ -63,14 +63,24 @@ class FirstOrderBuildingAwarePropagationLossModel : public BuildingsPropagationL
     double PenetrationLoss(std::vector<Ptr<Building>> NLOSBuildings) const;
 
     /**
-     * @brief Compute the path loss that is diffracted by the building(s)
+     * @brief Compute the path loss that is diffracted by the building(s) with positive angles
      *
      * @param NLOSBuildings the buildings between the sight of the two nodes
      * @param rx the mobility model of the destination
      * @param tx the mobility model of the source
      * @returns the diffraction loss (in dB)
      */
-    double DiffractionLoss(std::vector<Ptr<Building>> NLOSBuildings, std::vector<Ptr<Building>> AllBuildings, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const;
+    double NLOSDiffractionLoss(std::vector<Ptr<Building>> NLOSBuildings, std::vector<Ptr<Building>> AllBuildings, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const;
+
+    /**
+     * @brief Compute the path loss that is diffracted by the building(s) with negative angles
+     *
+     * @param NLOSBuildings the buildings between the sight of the two nodes
+     * @param rx the mobility model of the destination
+     * @param tx the mobility model of the source
+     * @returns the diffraction loss (in dB)
+     */
+    double LOSDiffractionLoss(std::vector<Ptr<Building>> AllBuildings, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const;
 
     /**
      * @brief Compute the path loss that is reflected on the building(s)
