@@ -34,7 +34,6 @@ In your code:
 
 ## TO DO
 
-* Add negative angle diffraction loss
 * Tune the value of loss for different materials
 * Add an alternative loss inside building to better reflect the loss through them (for now only the walls impact it)
 
