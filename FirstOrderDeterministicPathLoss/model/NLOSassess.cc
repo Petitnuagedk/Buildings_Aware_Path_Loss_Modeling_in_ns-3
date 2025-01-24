@@ -8,7 +8,7 @@
 
 #include "NLOSassess.h"
 
-#include "building.h"
+#include "ns3/building.h"
 
 #include "ns3/mobility-module.h"
 #include "ns3/object.h"

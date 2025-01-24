@@ -9,7 +9,7 @@
 #ifndef NLOSASSESS_H
 #define NLOSASSESS_H
 
-#include "building.h"
+#include "ns3/building.h"
 
 #include "ns3/mobility-module.h"
 #include "ns3/object.h"
