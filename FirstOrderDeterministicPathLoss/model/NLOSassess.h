@@ -9,7 +9,7 @@
 #ifndef NLOSASSESS_H
 #define NLOSASSESS_H
 
-#include "ns3/building.h"
+#include "building.h"
 
 #include "ns3/mobility-module.h"
 #include "ns3/object.h"
@@ -18,9 +18,9 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
+#include <optional>
 #include <utility>
 #include <vector>
-#include <optional>
 
 namespace ns3
 {
@@ -66,7 +66,9 @@ class NLOSassess : public Object
      * @param CurrBuild Current Building to evaluate
      * @return the corners of buildings that may produce a diffraction
      */
-    std::vector<Vector> GetCorner(Ptr<Building> CurrBuild, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx);
+    std::vector<Vector> GetCorner(Ptr<Building> CurrBuild,
+                                  Ptr<MobilityModel> rx,
+                                  Ptr<MobilityModel> tx);
 
     /**
      * @brief Gives the corners that may produce reflection between Rx and Tx
@@ -76,7 +78,9 @@ class NLOSassess : public Object
      * @param Building Current Building to evaluate
      * @return the coordinates on the surface that may produce a diffraction
      */
-    std::optional<Vector> Getreflectionpoint(Ptr<Building> Building, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx);
+    std::optional<Vector> Getreflectionpoint(Ptr<Building> Building,
+                                             Ptr<MobilityModel> rx,
+                                             Ptr<MobilityModel> tx);
 
   private:
     /** @brief The point is allocated to one of the zone detailed in the figure bellow.

@@ -8,20 +8,21 @@
 
 #include "first-order-building-aware-propagation-loss-model.h"
 
-#include "ns3/mobility-building-info.h"
+#include "building-list.h"
+#include "building.h"
+#include "mobility-building-info.h"
+
 #include "ns3/double.h"
 #include "ns3/log.h"
 #include "ns3/mobility-model.h"
 #include "ns3/pointer.h"
-#include "ns3/building.h"
-#include "ns3/building-list.h"
 
 // Loss models
 #include "ns3/itu-r-1411-los-propagation-loss-model.h"
 
+#include <algorithm>
 #include <cmath>
 #include <random>
-#include <algorithm>
 
 namespace ns3
 {
@@ -48,13 +49,26 @@ FirstOrderBuildingAwarePropagationLossModel::GetTypeId()
             .SetParent<BuildingsPropagationLossModel>()
             .AddConstructor<FirstOrderBuildingAwarePropagationLossModel>()
             .SetGroupName("Buildings")
-        ;
+            .AddAttribute(
+                "Frequency",
+                "The Frequency  (default is 2.106 GHz).",
+                DoubleValue(2160e6),
+                MakeDoubleAccessor(&FirstOrderBuildingAwarePropagationLossModel::SetFrequency),
+                MakeDoubleChecker<double>());
 
     return tid;
 }
 
+void
+FirstOrderBuildingAwarePropagationLossModel::SetFrequency(double freq)
+{
+    m_ituR1411Los->SetAttribute("Frequency", DoubleValue(freq));
+    m_frequency = freq;
+}
+
 double
-FirstOrderBuildingAwarePropagationLossModel::GetLoss(Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const
+FirstOrderBuildingAwarePropagationLossModel::GetLoss(Ptr<MobilityModel> rx,
+                                                     Ptr<MobilityModel> tx) const
 {
     NS_ASSERT_MSG(
         (rx->GetPosition().z >= 0) && (tx->GetPosition().z >= 0),
@@ -78,24 +92,25 @@ FirstOrderBuildingAwarePropagationLossModel::GetLoss(Ptr<MobilityModel> rx, Ptr<
     for (int index = 0; index < limit; ++index)
     {
         Ptr<Building> CurBu = BuildingList::GetBuilding(index);
-        if (CurBu->IsIntersect(rxPos,txPos))
+        if (CurBu->IsIntersect(rxPos, txPos))
         {
             NLOSBuildings.push_back(CurBu);
         }
         AllBuildings.push_back(CurBu);
     }
 
-
     if (!NLOSBuildings.empty())
     {
         double direct_path_loss = loss + PenetrationLoss(NLOSBuildings);
-        double diffracted_path_loss = loss + NLOSDiffractionLoss(NLOSBuildings, AllBuildings, rx, tx);
-        double reflected_path_loss  = ReflectionLoss(AllBuildings, rx, tx);
-        loss = std::min(std::min(direct_path_loss, diffracted_path_loss), reflected_path_loss); // #include <algorithm>
+        double diffracted_path_loss =
+            loss + NLOSDiffractionLoss(NLOSBuildings, AllBuildings, rx, tx);
+        double reflected_path_loss = ReflectionLoss(AllBuildings, rx, tx);
+        loss = std::min(std::min(direct_path_loss, diffracted_path_loss),
+                        reflected_path_loss); // #include <algorithm>
         loss += Noise(loss);
         return loss;
     }
-    
+
     loss += LOSDiffractionLoss(AllBuildings, rx, tx);
     std::cout << "LOSDiffractionLoss + loss : " << loss << "\n";
     loss += Noise(loss);
@@ -103,7 +118,8 @@ FirstOrderBuildingAwarePropagationLossModel::GetLoss(Ptr<MobilityModel> rx, Ptr<
 }
 
 double
-FirstOrderBuildingAwarePropagationLossModel::PenetrationLoss(std::vector<Ptr<Building>> NLOSBuildings) const
+FirstOrderBuildingAwarePropagationLossModel::PenetrationLoss(
+    std::vector<Ptr<Building>> NLOSBuildings) const
 {
     double loss = 0;
     for (size_t i = 0; i < NLOSBuildings.size(); ++i)
@@ -134,11 +150,15 @@ FirstOrderBuildingAwarePropagationLossModel::PenetrationLoss(std::vector<Ptr<Bui
 }
 
 double
-FirstOrderBuildingAwarePropagationLossModel::NLOSDiffractionLoss(std::vector<Ptr<Building>> NLOSBuildings, std::vector<Ptr<Building>> AllBuildings, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const
+FirstOrderBuildingAwarePropagationLossModel::NLOSDiffractionLoss(
+    std::vector<Ptr<Building>> NLOSBuildings,
+    std::vector<Ptr<Building>> AllBuildings,
+    Ptr<MobilityModel> rx,
+    Ptr<MobilityModel> tx) const
 {
-    auto CreateTempMobilityModel = [](Vector position)
-    {
-        Ptr<ConstantPositionMobilityModel> tempMobility = CreateObject<ConstantPositionMobilityModel>();
+    auto CreateTempMobilityModel = [](Vector position) {
+        Ptr<ConstantPositionMobilityModel> tempMobility =
+            CreateObject<ConstantPositionMobilityModel>();
         tempMobility->SetPosition(position);
         return tempMobility;
     };
@@ -150,12 +170,13 @@ FirstOrderBuildingAwarePropagationLossModel::NLOSDiffractionLoss(std::vector<Ptr
         if (size_cor == 1)
         {
             Ptr<MobilityModel> corner_pos = CreateTempMobilityModel(CornersPos[0]);
-            std::vector<Ptr<Building>> NLOScorner = m_assess->assesNLOS(corner_pos, tx, AllBuildings);
+            std::vector<Ptr<Building>> NLOScorner =
+                m_assess->assesNLOS(corner_pos, tx, AllBuildings);
             if (NLOScorner.empty())
             {
-                double theta = calculateAngle(tx,CornersPos[0],rx);
-                //std::cout << "theta : " << theta << "\n";
-                //std::cout << "DiffFunct : " << DiffFunct(theta) << "\n";
+                double theta = calculateAngle(tx, CornersPos[0], rx);
+                // std::cout << "theta : " << theta << "\n";
+                // std::cout << "DiffFunct : " << DiffFunct(theta) << "\n";
                 return DiffFunct(theta);
             }
         }
@@ -163,32 +184,38 @@ FirstOrderBuildingAwarePropagationLossModel::NLOSDiffractionLoss(std::vector<Ptr
         {
             Ptr<MobilityModel> corner_pos_1 = CreateTempMobilityModel(CornersPos[0]);
             Ptr<MobilityModel> corner_pos_2 = CreateTempMobilityModel(CornersPos[1]);
-            std::vector<Ptr<Building>> NLOScorner_1 = m_assess->assesNLOS(corner_pos_1, tx, AllBuildings);
-            std::vector<Ptr<Building>> NLOScorner_2 = m_assess->assesNLOS(corner_pos_2, tx, AllBuildings);
+            std::vector<Ptr<Building>> NLOScorner_1 =
+                m_assess->assesNLOS(corner_pos_1, tx, AllBuildings);
+            std::vector<Ptr<Building>> NLOScorner_2 =
+                m_assess->assesNLOS(corner_pos_2, tx, AllBuildings);
             if (NLOScorner_1.empty() || NLOScorner_2.empty())
             {
-                double theta_1 = calculateAngle(tx,CornersPos[0],rx);
-                double theta_2 = calculateAngle(tx,CornersPos[1],rx);
+                double theta_1 = calculateAngle(tx, CornersPos[0], rx);
+                double theta_2 = calculateAngle(tx, CornersPos[1], rx);
                 double loss_1 = DiffFunct(theta_1);
                 double loss_2 = DiffFunct(theta_2);
-                return std::min(loss_1,loss_2);
+                return std::min(loss_1, loss_2);
             }
         }
         if (size_cor > 2)
         {
             NS_LOG_ERROR(this << "Unexpected amount of corners");
-            return std::numeric_limits<double>::infinity();;
+            return std::numeric_limits<double>::infinity();
+            ;
         }
     }
     return std::numeric_limits<double>::infinity();
 }
 
 double
-FirstOrderBuildingAwarePropagationLossModel::LOSDiffractionLoss(std::vector<Ptr<Building>> AllBuildings, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const
+FirstOrderBuildingAwarePropagationLossModel::LOSDiffractionLoss(
+    std::vector<Ptr<Building>> AllBuildings,
+    Ptr<MobilityModel> rx,
+    Ptr<MobilityModel> tx) const
 {
-    auto CreateTempMobilityModel = [](Vector position)
-    {
-        Ptr<ConstantPositionMobilityModel> tempMobility = CreateObject<ConstantPositionMobilityModel>();
+    auto CreateTempMobilityModel = [](Vector position) {
+        Ptr<ConstantPositionMobilityModel> tempMobility =
+            CreateObject<ConstantPositionMobilityModel>();
         tempMobility->SetPosition(position);
         return tempMobility;
     };
@@ -201,10 +228,11 @@ FirstOrderBuildingAwarePropagationLossModel::LOSDiffractionLoss(std::vector<Ptr<
         if (size_cor == 1)
         {
             Ptr<MobilityModel> corner_pos = CreateTempMobilityModel(CornersPos[0]);
-            std::vector<Ptr<Building>> NLOScorner = m_assess->assesNLOS(corner_pos, tx, AllBuildings);
+            std::vector<Ptr<Building>> NLOScorner =
+                m_assess->assesNLOS(corner_pos, tx, AllBuildings);
             if (NLOScorner.empty())
             {
-                double theta = - calculateAngle(tx,CornersPos[0],rx);
+                double theta = -calculateAngle(tx, CornersPos[0], rx);
                 losses.push_back(DiffFunct(theta));
             }
         }
@@ -212,29 +240,34 @@ FirstOrderBuildingAwarePropagationLossModel::LOSDiffractionLoss(std::vector<Ptr<
         {
             Ptr<MobilityModel> corner_pos_1 = CreateTempMobilityModel(CornersPos[0]);
             Ptr<MobilityModel> corner_pos_2 = CreateTempMobilityModel(CornersPos[1]);
-            std::vector<Ptr<Building>> NLOScorner_1 = m_assess->assesNLOS(corner_pos_1, tx, AllBuildings);
-            std::vector<Ptr<Building>> NLOScorner_2 = m_assess->assesNLOS(corner_pos_2, tx, AllBuildings);
+            std::vector<Ptr<Building>> NLOScorner_1 =
+                m_assess->assesNLOS(corner_pos_1, tx, AllBuildings);
+            std::vector<Ptr<Building>> NLOScorner_2 =
+                m_assess->assesNLOS(corner_pos_2, tx, AllBuildings);
             if (NLOScorner_1.empty() || NLOScorner_2.empty())
             {
-                double theta_1 = - calculateAngle(tx,CornersPos[0],rx);
-                double theta_2 = - calculateAngle(tx,CornersPos[1],rx);
+                double theta_1 = -calculateAngle(tx, CornersPos[0], rx);
+                double theta_2 = -calculateAngle(tx, CornersPos[1], rx);
                 double loss_1 = DiffFunct(theta_1);
                 double loss_2 = DiffFunct(theta_2);
-                losses.push_back(std::min(loss_1,loss_2));
+                losses.push_back(std::min(loss_1, loss_2));
             }
         }
         if (size_cor > 2)
         {
             NS_LOG_ERROR(this << "Unexpected amount of corners");
-            return std::numeric_limits<double>::infinity();;
+            return std::numeric_limits<double>::infinity();
+            ;
         }
     }
 
     if (!losses.empty())
     {
-        auto maxIt = std::max_element(losses.begin(), losses.end()); // Get iterator to the maximum element
+        auto maxIt =
+            std::max_element(losses.begin(), losses.end()); // Get iterator to the maximum element
         double maxL = *maxIt; // Dereference the iterator to get the value
-        if (maxL >= 0) {
+        if (maxL >= 0)
+        {
             return maxL;
         }
         return 0.0;
@@ -243,20 +276,24 @@ FirstOrderBuildingAwarePropagationLossModel::LOSDiffractionLoss(std::vector<Ptr<
 }
 
 double
-FirstOrderBuildingAwarePropagationLossModel::ReflectionLoss(std::vector<Ptr<Building>> AllBuildings, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const
+FirstOrderBuildingAwarePropagationLossModel::ReflectionLoss(std::vector<Ptr<Building>> AllBuildings,
+                                                            Ptr<MobilityModel> rx,
+                                                            Ptr<MobilityModel> tx) const
 {
     std::vector<double> refl_loss;
     double refl_coef = 0;
 
     auto CreateTempMobilityModel = [](Vector position) {
-        Ptr<ConstantPositionMobilityModel> tempMobility = CreateObject<ConstantPositionMobilityModel>();
+        Ptr<ConstantPositionMobilityModel> tempMobility =
+            CreateObject<ConstantPositionMobilityModel>();
         tempMobility->SetPosition(position);
         return tempMobility;
     };
 
     for (size_t i = 0; i < AllBuildings.size(); ++i)
     {
-        std::optional<Vector> reflection_point = m_assess->Getreflectionpoint(AllBuildings[i], rx, tx);
+        std::optional<Vector> reflection_point =
+            m_assess->Getreflectionpoint(AllBuildings[i], rx, tx);
         if (reflection_point)
         {
             std::cout << "reflection point : " << *reflection_point << "\n";
@@ -287,9 +324,8 @@ FirstOrderBuildingAwarePropagationLossModel::ReflectionLoss(std::vector<Ptr<Buil
                 // Calculate loss
                 std::cout << "first half : " << ItuR1411(tx, reflectionMobility) << "\n";
                 std::cout << "second half : " << ItuR1411(reflectionMobility, rx) << "\n";
-                double loss = ItuR1411(tx, reflectionMobility) + 
-                              ItuR1411(reflectionMobility, rx) + 
-                              refl_coef;
+                double loss =
+                    ItuR1411(tx, reflectionMobility) + ItuR1411(reflectionMobility, rx) + refl_coef;
                 refl_loss.push_back(loss);
             }
         }
@@ -309,24 +345,26 @@ FirstOrderBuildingAwarePropagationLossModel::ReflectionLoss(std::vector<Ptr<Buil
 double
 FirstOrderBuildingAwarePropagationLossModel::Noise(double loss) const
 {
-    double y = 0.25*loss + 5;
-    double top = y*1.1;
-    double bot = y*(1-.1);
+    double y = 0.25 * loss + 5;
+    double top = y * 1.1;
+    double bot = y * (1 - .1);
     return getRandomDouble(bot, top);
 }
 
 double
 FirstOrderBuildingAwarePropagationLossModel::getRandomDouble(double min, double max) const
-{ // #include <random>
-    std::random_device rd;  // Seed the random number generator
-    std::mt19937 gen(rd()); // Mersenne Twister engine
+{                                                         // #include <random>
+    std::random_device rd;                                // Seed the random number generator
+    std::mt19937 gen(rd());                               // Mersenne Twister engine
     std::uniform_real_distribution<double> dis(min, max); // Distribution in the range [min, max]
 
     return dis(gen); // Generate and return a random number
 }
 
 double
-FirstOrderBuildingAwarePropagationLossModel::calculateAngle(Ptr<MobilityModel> rx, Vector B, Ptr<MobilityModel> tx) const
+FirstOrderBuildingAwarePropagationLossModel::calculateAngle(Ptr<MobilityModel> rx,
+                                                            Vector B,
+                                                            Ptr<MobilityModel> tx) const
 { // Test available at Angletest.cc
 
     Vector A = rx->GetPosition();
@@ -360,11 +398,12 @@ FirstOrderBuildingAwarePropagationLossModel::DiffFunct(double angle) const
     double b = 24.9;
     double c = 3.555;
     double d = 31.7;
-    return -a/(exp((angle/b)-c))+d;
+    return -a / (exp((angle / b) - c)) + d;
 }
 
 double
-FirstOrderBuildingAwarePropagationLossModel::ItuR1411(Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const
+FirstOrderBuildingAwarePropagationLossModel::ItuR1411(Ptr<MobilityModel> rx,
+                                                      Ptr<MobilityModel> tx) const
 {
     return m_ituR1411Los->GetLoss(rx, tx);
 }

@@ -9,10 +9,10 @@
 #ifndef FIRSTORDERDETERMINISTICPATHLOSS_H
 #define FIRSTORDERDETERMINISTICPATHLOSS_H
 
-#include "ns3/buildings-propagation-loss-model.h"
-
-#include <ns3/propagation-environment.h>
 #include "NLOSassess.h"
+#include "buildings-propagation-loss-model.h"
+
+#include "ns3/propagation-environment.h"
 
 namespace ns3
 {
@@ -26,7 +26,7 @@ class ItuR1411LosPropagationLossModel;
  * @brief The FirstOrderBuildingAwarePropagationLossModel takes into account the presence
  * or not of buildings in the sight of nodes to compute loss. To limit the complexity and
  * computation overhead, we limit the reflection of signal to one and consider only one
- * diffraction effect (thus 'First Order'). 
+ * diffraction effect (thus 'First Order').
  *
  *  @warning This model is not meant to simulate realistic loss.
  *
@@ -34,7 +34,7 @@ class ItuR1411LosPropagationLossModel;
 
 class FirstOrderBuildingAwarePropagationLossModel : public BuildingsPropagationLossModel
 {
-    public:
+  public:
     /**
      * @brief Get the type ID.
      * @return The object TypeId.
@@ -42,6 +42,13 @@ class FirstOrderBuildingAwarePropagationLossModel : public BuildingsPropagationL
     static TypeId GetTypeId();
     FirstOrderBuildingAwarePropagationLossModel();
     ~FirstOrderBuildingAwarePropagationLossModel() override;
+
+    /**
+     * set the propagation frequency
+     *
+     * @param freq
+     */
+    void SetFrequency(double freq);
 
     /**
      * @brief Compute the path loss according to the nodes position
@@ -53,7 +60,7 @@ class FirstOrderBuildingAwarePropagationLossModel : public BuildingsPropagationL
      */
     double GetLoss(Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const override;
 
-    private:
+  private:
     /**
      * @brief Compute the path loss that goes throught the building(s)
      *
@@ -70,7 +77,10 @@ class FirstOrderBuildingAwarePropagationLossModel : public BuildingsPropagationL
      * @param tx the mobility model of the source
      * @returns the diffraction loss (in dB)
      */
-    double NLOSDiffractionLoss(std::vector<Ptr<Building>> NLOSBuildings, std::vector<Ptr<Building>> AllBuildings, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const;
+    double NLOSDiffractionLoss(std::vector<Ptr<Building>> NLOSBuildings,
+                               std::vector<Ptr<Building>> AllBuildings,
+                               Ptr<MobilityModel> rx,
+                               Ptr<MobilityModel> tx) const;
 
     /**
      * @brief Compute the path loss that is diffracted by the building(s) with negative angles
@@ -80,7 +90,9 @@ class FirstOrderBuildingAwarePropagationLossModel : public BuildingsPropagationL
      * @param tx the mobility model of the source
      * @returns the diffraction loss (in dB)
      */
-    double LOSDiffractionLoss(std::vector<Ptr<Building>> AllBuildings, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const;
+    double LOSDiffractionLoss(std::vector<Ptr<Building>> AllBuildings,
+                              Ptr<MobilityModel> rx,
+                              Ptr<MobilityModel> tx) const;
 
     /**
      * @brief Compute the path loss that is reflected on the building(s)
@@ -90,7 +102,9 @@ class FirstOrderBuildingAwarePropagationLossModel : public BuildingsPropagationL
      * @param tx the mobility model of the source
      * @returns the reflection loss (in dB)
      */
-    double ReflectionLoss(std::vector<Ptr<Building>> AllBuildings, Ptr<MobilityModel> rx, Ptr<MobilityModel> tx) const;
+    double ReflectionLoss(std::vector<Ptr<Building>> AllBuildings,
+                          Ptr<MobilityModel> rx,
+                          Ptr<MobilityModel> tx) const;
 
     /**
      * @brief Adds noise to the loss, proportionnaly to it's strength
@@ -138,8 +152,9 @@ class FirstOrderBuildingAwarePropagationLossModel : public BuildingsPropagationL
     /// ItuR1411LosPropagationLossModel
     Ptr<ItuR1411LosPropagationLossModel> m_ituR1411Los;
     Ptr<NLOSassess> m_assess;
+    double m_frequency;
 };
 
-}
+} // namespace ns3
 
 #endif /* FIRSTORDERDETERMINISTICPATHLOSS_H */

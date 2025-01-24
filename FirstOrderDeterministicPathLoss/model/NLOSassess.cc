@@ -8,7 +8,7 @@
 
 #include "NLOSassess.h"
 
-#include "ns3/building.h"
+#include "building.h"
 
 #include "ns3/mobility-module.h"
 #include "ns3/object.h"
@@ -54,7 +54,9 @@ NLOSassess::zone(Ptr<MobilityModel> mob, Ptr<Building> b)
     double x = mob->GetPosition().x;
     double y = mob->GetPosition().y;
 
-    if (((x < b->GetBoundaries().xMax) && (x > b->GetBoundaries().xMin)) && // since the comparaison is stric, mob on bound is consider outside
+    if (((x < b->GetBoundaries().xMax) &&
+         (x > b->GetBoundaries()
+                  .xMin)) && // since the comparaison is stric, mob on bound is consider outside
         ((y < b->GetBoundaries().yMax) && (y > b->GetBoundaries().yMin)))
     {
         return 'Z'; // Node in walls
@@ -250,7 +252,7 @@ NLOSassess::GetCorner(Ptr<Building> CurrBuild, Ptr<MobilityModel> rx, Ptr<Mobili
     std::vector<std::string> Bot_left = {"HE", "EH", "FH", "HF", "FA", "AF"};
     // Area where the diffraction happens in bottom left corner
     std::vector<std::string> Bot_right = {"DG", "GD", "FD", "DF", "FC", "CF"};
-    
+
     Vector Corner_pos;
     std::vector<Vector> Corners;
     char zone_a = zone(rx, CurrBuild);
@@ -285,24 +287,24 @@ NLOSassess::GetCorner(Ptr<Building> CurrBuild, Ptr<MobilityModel> rx, Ptr<Mobili
         Corners.push_back(Corner_pos);
         return Corners;
     }
-    if ((zone_comb=="CG")||(zone_comb=="GC"))
+    if ((zone_comb == "CG") || (zone_comb == "GC"))
     {
         Vector Corner_pos_2;
         Corner_pos.x = CurrBuild->GetBoundaries().xMin;
-        Corner_pos.y = CurrBuild->GetBoundaries().yMax;   
+        Corner_pos.y = CurrBuild->GetBoundaries().yMax;
         Corner_pos_2.x = CurrBuild->GetBoundaries().xMax;
-        Corner_pos_2.y = CurrBuild->GetBoundaries().yMin; 
+        Corner_pos_2.y = CurrBuild->GetBoundaries().yMin;
         Corners.push_back(Corner_pos);
-        Corners.push_back(Corner_pos_2);    
+        Corners.push_back(Corner_pos_2);
         return Corners;
     }
-    if ((zone_comb=="AE")||(zone_comb=="AE"))
+    if ((zone_comb == "AE") || (zone_comb == "EA"))
     {
         Vector Corner_pos_2;
         Corner_pos.x = CurrBuild->GetBoundaries().xMin;
-        Corner_pos.y = CurrBuild->GetBoundaries().yMin;   
+        Corner_pos.y = CurrBuild->GetBoundaries().yMin;
         Corner_pos_2.x = CurrBuild->GetBoundaries().xMax;
-        Corner_pos_2.y = CurrBuild->GetBoundaries().yMax; 
+        Corner_pos_2.y = CurrBuild->GetBoundaries().yMax;
         Corners.push_back(Corner_pos);
         Corners.push_back(Corner_pos_2);
         return Corners;
@@ -334,7 +336,8 @@ NLOSassess::Getreflectionpoint(Ptr<Building> Building, Ptr<MobilityModel> rx, Pt
         double rx_y = rx->GetPosition().y;
         double tx_x = tx->GetPosition().x;
         double tx_y = tx->GetPosition().y;
-        double x_refl = ( rx_x*(y_refl-tx_y) - tx_x*(rx_y-y_refl) ) / ( (y_refl-tx_y) - (rx_y-y_refl) );
+        double x_refl =
+            (rx_x * (y_refl - tx_y) - tx_x * (rx_y - y_refl)) / ((y_refl - tx_y) - (rx_y - y_refl));
         return Vector(x_refl, y_refl, 1);
     }
     if (std::find(y_max.begin(), y_max.end(), zone_comb) != y_max.end())
@@ -344,7 +347,8 @@ NLOSassess::Getreflectionpoint(Ptr<Building> Building, Ptr<MobilityModel> rx, Pt
         double rx_y = rx->GetPosition().y;
         double tx_x = tx->GetPosition().x;
         double tx_y = tx->GetPosition().y;
-        double x_refl = ( rx_x*(y_refl-tx_y) - tx_x*(rx_y-y_refl) ) / ( (y_refl-tx_y) - (rx_y-y_refl) );
+        double x_refl =
+            (rx_x * (y_refl - tx_y) - tx_x * (rx_y - y_refl)) / ((y_refl - tx_y) - (rx_y - y_refl));
         return Vector(x_refl, y_refl, 1);
     }
     if (std::find(x_min.begin(), x_min.end(), zone_comb) != x_min.end())
@@ -354,7 +358,8 @@ NLOSassess::Getreflectionpoint(Ptr<Building> Building, Ptr<MobilityModel> rx, Pt
         double rx_y = rx->GetPosition().y;
         double tx_x = tx->GetPosition().x;
         double tx_y = tx->GetPosition().y;
-        double y_refl = ( rx_y*(x_refl-tx_x) + tx_y*(x_refl-rx_x) ) / ( (x_refl-tx_y) + (x_refl-rx_x) );
+        double y_refl =
+            (rx_y * (x_refl - tx_x) + tx_y * (x_refl - rx_x)) / ((x_refl - tx_y) + (x_refl - rx_x));
         return Vector(x_refl, y_refl, 1);
     }
     if (std::find(x_max.begin(), x_max.end(), zone_comb) != x_max.end())
@@ -364,7 +369,8 @@ NLOSassess::Getreflectionpoint(Ptr<Building> Building, Ptr<MobilityModel> rx, Pt
         double rx_y = rx->GetPosition().y;
         double tx_x = tx->GetPosition().x;
         double tx_y = tx->GetPosition().y;
-        double y_refl = ( rx_y*(x_refl-tx_x) + tx_y*(x_refl-rx_x) ) / ( (x_refl-tx_y) + (x_refl-rx_x) );
+        double y_refl =
+            (rx_y * (x_refl - tx_x) + tx_y * (x_refl - rx_x)) / ((x_refl - tx_y) + (x_refl - rx_x));
         return Vector(x_refl, y_refl, 1);
     }
     return std::nullopt;
