@@ -11,7 +11,7 @@ if(${ENABLE_EXAMPLES})
 endif()
 
 build_lib(
-    LIBNAME FirstOrderDeterministicPathLoss
+    LIBNAME FirstOrderBuildingsAwarePathLoss
     SOURCE_FILES model/first-order-buildings-aware-propagation-loss-model.cc
                  model/foba-toolbox.cc
     HEADER_FILES model/first-order-buildings-aware-propagation-loss-model.h
