@@ -20,7 +20,7 @@ It is based on the concept of **dominant path models** which, unlike exhaustive 
 
 ## Usage
 
-To use this tool, simply download this folder and place it in the _contrib_ folder in your ns-3.xx repository.
+To use this tool, simply download the "FirstOrderBuildingsAwarePathLoss" folder and place it in the _contrib_ folder in your ns-3.xx repository.
 
 In your code:
 * write `#include <ns3/first-order-buildings-aware-propagation-loss-model.h>` along the other header files
