@@ -24,7 +24,7 @@ using namespace ns3;
 
 void savePathlossData(double current_time, double pathloss) {
     try {
-        std::string filename = "FOBA-test-1-pathloss.csv";
+        std::string filename = "FOBA-test-pathloss.csv";
         std::filesystem::path file_path = std::filesystem::path(filename);
 
         // Open the file for writing
