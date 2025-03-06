@@ -32,11 +32,6 @@ In your code:
 * The `ItuR1411LosPropagationLossModel` class is referenced but not included in this repository.
 * For more information on NS-3 propagation models, refer to the official [NS-3 documentation](https://www.nsnam.org/docs/).
 
-## TO DO
-
-* Tune the value of loss for different materials
-* Add an alternative loss inside building to better reflect the loss through them (for now only the walls impact it)
-
 ## Authors
 
 Hugo Le Dirach 
