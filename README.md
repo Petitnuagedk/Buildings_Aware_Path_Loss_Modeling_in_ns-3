@@ -4,8 +4,11 @@
 **Library/Framework:** NS-3 (Network Simulator 3)
 
 ## Overview
-This project implements a first-order building-aware propagation loss model for simulating wireless communication networks in urban environments. The model takes into account the presence of buildings and their impact on signal propagation, including penetration, diffraction, and reflection losses.
+This project implements a first-order buildings-aware propagation loss model for simulating wireless communication networks in urban environments. The model takes into account the presence of buildings and their impact on signal propagation, including penetration, diffraction, and reflection losses.
 It is based on the concept of **dominant path models** which, unlike exhaustive ray tracing or radiosity calculations, identifies and only simulates the most influential paths (e.g., line-of-sight, first-order reflections, and possibly some stronger diffractions) between the transmitter and receiver. By focusing on these dominant signal propagation paths, the method achieves a more manageable computational load while still providing reliable predictions for signal behavior in specific scenarios, especially where detailed interaction with the environment's geometry is crucial.
+
+The full paper that detail this model is under review and will be posted here at some point.
+
 
 ## Code architecture
 ![Screenshot from 2025-01-20 08-56-01](https://github.com/user-attachments/assets/270b27d7-77dc-40b2-9f12-158878ddacd2)
