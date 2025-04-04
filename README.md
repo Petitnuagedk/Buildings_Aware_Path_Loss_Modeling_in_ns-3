@@ -9,7 +9,6 @@ It is based on the concept of **dominant path models** which, unlike exhaustive 
 
 ## Code architecture
 ![Screenshot from 2025-01-20 08-56-01](https://github.com/user-attachments/assets/270b27d7-77dc-40b2-9f12-158878ddacd2)
-![Screenshot from 2025-01-20 08-56-18](https://github.com/user-attachments/assets/1ed38dbe-bcef-44e1-80a7-f8e46f225c78)
 
 ### Key Features
 
