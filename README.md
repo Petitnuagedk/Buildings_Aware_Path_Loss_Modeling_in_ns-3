@@ -14,7 +14,7 @@ It is based on the concept of **dominant path models** which, unlike exhaustive 
 
 * **Building Awareness**: Accounts for the presence of buildings between transmitter and receiver nodes
 * **First-Order Approximation**: Limits signal reflections to one and considers only one diffraction effect and one reflection to reduce computational complexity
-* **Loss Calculation**: Computes path loss (in dB) based on node positions, building presence, and signal interaction with buildings
+* **Loss Calculation**: Computes path loss based on node positions, building presence, and signal interaction with buildings
 * **Integration with NS-3**: Utilizes NS-3's `BuildingsPropagationLossModel` and `MobilityModel` classes
 
 ## Usage
