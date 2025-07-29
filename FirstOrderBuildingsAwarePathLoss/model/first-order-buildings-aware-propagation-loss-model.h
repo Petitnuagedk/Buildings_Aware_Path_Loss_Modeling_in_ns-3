@@ -72,8 +72,7 @@ class FirstOrderBuildingsAwarePropagationLossModel : public PropagationLossModel
 
   private:
     /**
-     * Computes the received power by applying the pathloss model described in
-     * 3GPP TR 38.901
+     * Computes the received power by applying the pathloss model
      *
      * @param txPowerDbm tx power in dBm
      * @param a tx mobility model
