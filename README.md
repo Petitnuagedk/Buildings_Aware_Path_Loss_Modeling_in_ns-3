@@ -1,4 +1,4 @@
-# First Order Building Aware Propagation Loss Model
+# First Order Buildings Aware Propagation Loss Model
 
 **Language:** C++
 **Library/Framework:** ns-3 (Network Simulator 3)
