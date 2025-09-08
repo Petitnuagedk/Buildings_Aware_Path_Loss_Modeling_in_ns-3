@@ -22,7 +22,7 @@ The full paper that detail this model is under review and will be posted here at
 
 ## Usage
 
-To use this tool, simply download the "FirstOrderBuildingsAwarePathLoss" folder and place it in the _contrib_ folder in your ns-3.xx repository.
+To use this tool, simply download the "first-order-buildings-aware-path-loss" folder and place it in the _contrib_ folder in your ns-3.xx repository.
 
 In your code:
 * write `#include <ns3/first-order-buildings-aware-propagation-loss-model.h>` along the other header files
