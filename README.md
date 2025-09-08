@@ -15,7 +15,8 @@ The full paper that detail this model is available with in the last section.
 
 
 ## Code architecture
-<img width="1589" height="540" alt="Screenshot from 2025-09-08 09-53-41" src="https://github.com/user-attachments/assets/0ef5bb30-59b2-4382-9324-a6a66e4bc5ce" />
+
+<img width="1588" height="538" alt="Screenshot from 2025-09-08 10-11-41" src="https://github.com/user-attachments/assets/1a407cf9-cd76-4cdb-853e-f23134afa679" />
 
 ### Key Features
 
