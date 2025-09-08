@@ -31,6 +31,7 @@ In your code:
 ## Notes
 
 * This model is **not intended for absolute realistic loss simulations** (as per the warning in the code comments), it's goal it to bring some coherence in the interaction of the signal with the environment.
+* This model uses a noise component based on the RNG of ns-3, to desable it in a simulation configuration script you can do : `lossModel->SetAttribute("NoiseEnabled", BooleanValue(false));` or `wifiChannel.AddPropagationLoss("ns3::FirstOrderBuildingsAwarePropagationLossModel", "NoiseEnabled", BooleanValue(false));`.
 * The `ItuR1411LosPropagationLossModel` class is referenced but not included in this repository.
 * For more information on NS-3 propagation models, refer to the official [NS-3 documentation](https://www.nsnam.org/docs/).
 
