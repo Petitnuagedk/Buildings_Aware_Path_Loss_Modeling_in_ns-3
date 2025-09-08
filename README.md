@@ -4,10 +4,14 @@
 **Library/Framework:** ns-3 (Network Simulator 3)
 
 ## Overview
-This project implements a first-order buildings-aware propagation loss model for simulating wireless communication networks in urban environments. The model takes into account the presence of buildings and their impact on signal propagation, including penetration, diffraction, and reflection losses.
+This project implements a first-order buildings-aware propagation loss model for simulating wireless communication networks in urban environments.
+
+The model takes into account the presence of buildings and their impact on signal propagation, including penetration, diffraction, and reflection losses.
 It is based on the concept of **dominant path models** which, unlike exhaustive ray tracing or radiosity calculations, identifies and only simulates the most influential paths (e.g., line-of-sight, first-order reflections, and possibly some stronger diffractions) between the transmitter and receiver. By focusing on these dominant signal propagation paths, the method achieves a more manageable computational load while still providing reliable predictions for signal behavior in specific scenarios, especially where detailed interaction with the environment's geometry is crucial.
 
-The full paper that detail this model is under review and will be posted here at some point.
+The "Slide of explanation.pdf" file will give a good overview of the module, how it works, what it does and it's limitation, we strongly advise to parse it before usage.
+
+The full paper that detail this model is available with in the last section.
 
 
 ## Code architecture
@@ -15,7 +19,7 @@ The full paper that detail this model is under review and will be posted here at
 
 ### Key Features
 
-* **Building Awareness**: Accounts for the presence of buildings between transmitter and receiver nodes
+* **Buildings Awareness**: Accounts for the presence of buildings between transmitter and receiver nodes
 * **First-Order Approximation**: Limits signal reflections to one and considers only one diffraction effect and one reflection to reduce computational complexity
 * **Loss Calculation**: Computes path loss based on node positions, building presence, and signal interaction with buildings
 * **Integration with ns-3**: Utilizes ns-3's `BuildingsPropagationLossModel` and `MobilityModel` classes
