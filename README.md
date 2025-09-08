@@ -55,7 +55,7 @@ In your code:
 
 ## Examples
 
-The repository includes two example files that demonstrate FOBA usage in NS-3 user scripts:
+The repository includes two example files that demonstrate FOBA usage in ns-3 user scripts:
 
 `FOBA_loss_value_test.cc` & `FOBA_time_test.cc`
 
