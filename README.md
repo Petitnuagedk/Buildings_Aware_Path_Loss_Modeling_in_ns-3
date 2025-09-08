@@ -39,6 +39,10 @@ In your code:
 
 Hugo Le Dirach 
 
+## Reference
+
+Hugo Le Dirach, Marc Boyer, and Emmanuel Lochin. 2025. Building-Aware Path Loss Modeling in ns-3. In Proceedings of the 2025 International Conference on ns-3 (ICNS3 '25). Association for Computing Machinery, New York, NY, USA, 143–152. https://doi.org/10.1145/3747204.3747220
+
 ## License
 Copyright (c) 2024 Office National d'Etude et de Recherche Aérospatiale (ONERA)
 SPDX-License-Identifier: GPL-2.0-only
