@@ -26,7 +26,7 @@ To use this tool, simply download the "first-order-buildings-aware-path-loss" fo
 
 In your code:
 * write `#include <ns3/first-order-buildings-aware-propagation-loss-model.h>` along the other header files
-* When setting up the channel condition use `.AddPropagationLoss("ns3::FirstOrderBuildingAwarePropagationLossModel")`
+* When setting up the channel condition use `.AddPropagationLoss("ns3::FirstOrderBuildingsAwarePropagationLossModel")`
 
 ## Notes
 
