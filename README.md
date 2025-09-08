@@ -9,7 +9,7 @@ This project implements a first-order buildings-aware propagation loss model for
 The model takes into account the presence of buildings and their impact on signal propagation, including penetration, diffraction, and reflection losses.
 It is based on the concept of **dominant path models** which, unlike exhaustive ray tracing or radiosity calculations, identifies and only simulates the most influential paths (e.g., line-of-sight, first-order reflections, and possibly some stronger diffractions) between the transmitter and receiver. By focusing on these dominant signal propagation paths, the method achieves a more manageable computational load while still providing reliable predictions for signal behavior in specific scenarios, especially where detailed interaction with the environment's geometry is crucial.
 
-The "Slides of explanation.pdf" file will give a good overview of the module, how it works, what it does and it's limitation, we strongly advise to parse it before usage.
+The "Slides of explanation.pdf" file will give a good overview of the module, how it works, what it does and it's limitations. We strongly advise to parse it before usage.
 
 The full paper that detail this model is available with in the last section.
 
