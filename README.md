@@ -29,7 +29,18 @@ The full paper that detail this model is available with in the last section.
 
 ## Usage
 
-To use this tool, simply download the repository as .zip (or by cloning it) and place the "first-order-buildings-aware-path-loss" folder in the _contrib_ folder in your ns-3.xx repository.
+*Option 1*: Download ZIP
+
+1. Download this repository as ZIP
+2. Extract the archive
+3. Copy the first-order-buildings-aware-path-loss folder to your NS-3 contrib directory:
+   
+`cp -r first-order-buildings-aware-path-loss/ /path/to/ns-3.xx/contrib/`
+
+*Option 2*: Clone Repository
+
+`cd /path/to/ns-3.xx/contrib/
+git clone https://github.com/Petitnuagedk/First_Order_Buildings_Aware_PathLoss.git first-order-buildings-aware-path-loss`
 
 In your code:
 * write `#include <ns3/first-order-buildings-aware-propagation-loss-model.h>` along the other header files
