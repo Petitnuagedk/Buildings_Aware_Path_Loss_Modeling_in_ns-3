@@ -1,4 +1,4 @@
-# First Order Buildings Aware Propagation Loss Model
+# First Order Buildings Aware (FOBA) Propagation Loss Model
 
 **Language:** C++
 **Library/Framework:** ns-3 (Network Simulator 3)
@@ -11,7 +11,7 @@ The full paper that detail this model is under review and will be posted here at
 
 
 ## Code architecture
-![Screenshot from 2025-01-20 08-56-01](https://github.com/user-attachments/assets/270b27d7-77dc-40b2-9f12-158878ddacd2)
+<img width="1589" height="540" alt="Screenshot from 2025-09-08 09-53-41" src="https://github.com/user-attachments/assets/0ef5bb30-59b2-4382-9324-a6a66e4bc5ce" />
 
 ### Key Features
 
