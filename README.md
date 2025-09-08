@@ -1,7 +1,7 @@
 # First Order Building Aware Propagation Loss Model
 
 **Language:** C++
-**Library/Framework:** NS-3 (Network Simulator 3)
+**Library/Framework:** ns-3 (Network Simulator 3)
 
 ## Overview
 This project implements a first-order buildings-aware propagation loss model for simulating wireless communication networks in urban environments. The model takes into account the presence of buildings and their impact on signal propagation, including penetration, diffraction, and reflection losses.
