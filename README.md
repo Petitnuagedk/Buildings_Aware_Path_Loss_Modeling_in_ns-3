@@ -3,6 +3,8 @@
 **Language:** C++
 **Library/Framework:** ns-3 (Network Simulator 3)
 
+This version (1.0) has been tested with ns-3.45 release.
+
 ## Overview
 This project implements a first-order buildings-aware propagation loss model for simulating wireless communication networks in urban environments.
 
